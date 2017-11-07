@@ -27,6 +27,7 @@ import java.util.Properties;
 public class KafkaStreamsTest {
 
     public static void main(String[] args) {
+        String topic = "test_streams";
         Map<String, Object> props = new HashMap<>();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-stream-processing-application");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.59:9092,192.168.1.41:9092");
@@ -35,7 +36,10 @@ public class KafkaStreamsTest {
         StreamsConfig config = new StreamsConfig(props);
 
         KStreamBuilder builder = new KStreamBuilder();
-        builder.stream("wys-test").mapValues(value -> value.toString().length()).foreach((key,value) -> System.out.println(key));
+        builder.stream(topic)
+                .mapValues(value -> value.toString().length())
+                .foreach((key,value) -> System.out.println("＊＊＊＊＊＊＊＊＊＊＊＊＊" + key));
+//        builder.stream(topic).map((key,value) -> );
 
         KafkaStreams streams = new KafkaStreams(builder, config);
         streams.start();
