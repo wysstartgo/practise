@@ -1,6 +1,7 @@
 package kafka;
 
 import com.alibaba.fastjson.JSONObject;
+import com.rt.druid.dto.MarketRealForexdataDto;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.Properties;
@@ -34,68 +35,8 @@ public class KafkaProducer {
         props.put("acks", "1");
         props.put("retries",0);
         org.apache.kafka.clients.producer.KafkaProducer kafkaProducer = new org.apache.kafka.clients.producer.KafkaProducer(props);
-        TestStreamDto testStreamDto = new TestStreamDto("PAMU","原油",System.currentTimeMillis(),199.9,39.5);
-        kafkaProducer.send(new ProducerRecord("test_streams",testStreamDto.getProdCode(), JSONObject.toJSONString(testStreamDto)));
+        MarketRealForexdataDto forexdataDto = new MarketRealForexdataDto();
+        kafkaProducer.send(new ProducerRecord("test_streams",null, JSONObject.toJSONString(forexdataDto)));
     }
 }
 
-class TestStreamDto {
-
-    String prodCode;
-
-    String prodName;
-
-    long timestamp;
-
-    double highPx;
-
-    double lowPx;
-
-    public TestStreamDto(String prodCode, String prodName, long timestamp, double highPx, double lowPx) {
-        this.prodCode = prodCode;
-        this.prodName = prodName;
-        this.timestamp = timestamp;
-        this.highPx = highPx;
-        this.lowPx = lowPx;
-    }
-
-    public String getProdCode() {
-        return prodCode;
-    }
-
-    public void setProdCode(String prodCode) {
-        this.prodCode = prodCode;
-    }
-
-    public String getProdName() {
-        return prodName;
-    }
-
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public double getHighPx() {
-        return highPx;
-    }
-
-    public void setHighPx(double highPx) {
-        this.highPx = highPx;
-    }
-
-    public double getLowPx() {
-        return lowPx;
-    }
-
-    public void setLowPx(double lowPx) {
-        this.lowPx = lowPx;
-    }
-}
