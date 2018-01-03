@@ -23,7 +23,7 @@ public class GuavaBloomFilter {
             public void funnel(String from, PrimitiveSink into) {
                 into.putString(from, Charsets.UTF_8);
             }
-        },100000,0.0001);
+        },50000,0.000001);
         String str1 = "中国";
         String str2 = "中华人民共和国";
         boolean mightContain = bloomFilter.mightContain(str1);
