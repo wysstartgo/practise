@@ -1,11 +1,10 @@
 package time;
 
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -74,6 +73,16 @@ public class Java8Time {
         // Returns time based on system clock zone
         Clock defaultClock = Clock.systemDefaultZone();
         System.out.println("Clock : " + clock);
+
+        LocalDate now1 = LocalDate.now();
+        System.out.println(now);
+        int dayOfMonth = now.getDayOfMonth();
+        System.out.println(dayOfMonth);
+//              
+//        Month month = now.getMonth();
+//        int days = month.get(ChronoField.DAY_OF_MONTH);
+//        System.out.println(days);
+        //return TimeUnit.DAYS.toMillis(days);
 
     }
 }
