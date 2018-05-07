@@ -1,0 +1,573 @@
+﻿export JAVA_HOME=/usr/java/jdk1.7.0_65
+export JAVA_OPTS="-server -Xms20600m -Xmx20600m  -XX:NewRatio=2 
+-XX:PermSize=128m -XX:MaxPermSize=512M  -XX:SurvivorRatio=4 
+-XX:MaxDirectMemorySize=4096m -XX:MaxTenuringThreshold=5 
+-XX:TargetSurvivorRatio=90 -Xnoclassgc -XX:+DisableExplicitGC -XX:+UseParNewGC 
+-XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=4 
+-XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=75 
+-XX:-UseBiasedLocking -XX:PretenureSizeThreshold=64m -XX:SoftRefLRUPolicyMSPerMB=0 -XX:-UseGCOverheadLimit 
+-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps 
+-XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -Xloggc:/usr/local/cykj/solr1/logs/solr_gc.log 
+-Dbootstrap_confdir=/usr/local/cykj/solr_home1/solr/solr_config/ -DzkHost=ip1:2181,ip2:2181,ip3:2181/solr  
+-Djute.maxbuffer=10240000"
+
+export JAVA_OPTS="-server -Xms2048m -Xmx2048m  -XX:NewRatio=2 -XX:SurvivorRatio=4 -XX:MaxTenuringThreshold=5
+-XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m
+-XX:TargetSurvivorRatio=90 -Xnoclassgc -XX:+DisableExplicitGC -XX:+UseParNewGC
+-XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=4
+-XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=75
+-XX:-UseBiasedLocking -XX:PretenureSizeThreshold=15m -XX:SoftRefLRUPolicyMSPerMB=0 -XX:-UseGCOverheadLimit
+-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps
+-XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -Xloggc:/usr/local/java/logs/videogc.log
+-Dbootstrap_confdir=/usr/local/java/logs"
+
+
+//sms jvm参数调整
+export JAVA_OPTS="-server -Xms1024m -Xmx2000m  -XX:NewRatio=2 -XX:SurvivorRatio=4 -XX:MaxTenuringThreshold=5 
+-XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=128m 
+-XX:TargetSurvivorRatio=90 -Xnoclassgc -XX:+DisableExplicitGC -XX:+UseParNewGC 
+-XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=4 
+-XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=75 
+-XX:-UseBiasedLocking -XX:PretenureSizeThreshold=30m -XX:SoftRefLRUPolicyMSPerMB=0 -XX:-UseGCOverheadLimit 
+-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps 
+-XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -Xloggc:D:\workspace\tomcat\apache-tomcat-9.0.0.M17\logs\anychatgc.log"
+
+ip.src==192.168.1.4 and http and http.request.method=="POST"
+ip.addr==192.168.1.38 and http
+
+{"time": "2017-07-27T00:05:34Z", "url": "/", "user": "bob", "latencyMs": 15}
+
+知识库 
+http://192.168.1.41:8082/wcp
+登录名：中文姓名，密码：111111nexus
+http://192.168.1.41:8081/nexus
+用户名：admin
+密码 123456
+启动方式： nexus start
+.settings.xml中在
+     servers节点中加入
+	 <server>  
+		<id>releases</id>  
+		<username>admin</username>  
+		<password>123456</password>  
+	  </server> 
+http://192.168.1.41:8080 密码统一123456
+
+wireshark抓包问题:
+以管理员进入: route add 192.168.1.8 mask 255.255.255.255 192.168.1.1
+用完之后要执行:route delete 192.168.1.8 mask 255.255.255.255 192.168.1.1  否则所有本机报文都经过网卡出去走一圈回来很耗性能。
+
+
+kafka:
+查看kafka topic:
+bin/kafka-topics.sh -zookeeper 192.168.1.59:2181 -describe -topic wys_test
+//添加partition
+./bin/kafka-topics.sh --zookeeper 192.168.1.59:2181 -alter -partitions 2 -topic wys_test
+创建topic:
+./bin/kafka-topics.sh --create --zookeeper 192.168.1.59:2181 --replication-factor 1 --partitions 2 --topic test_streams
+./bin/kafka-topics.sh --create --zookeeper 192.168.1.59:2181 --replication-factor 1 --partitions 2 --topic test_streams_result
+控制台producer:
+./bin/kafka-console-producer.sh --broker-list 192.168.1.106:9092 --topic forexdata01 --property "parse.key=true" --property "key.separator=:"
+控制台consumer:
+./bin/kafka-console-consumer.sh --zookeeper 192.168.1.37:2181 --topic forexdata01  --from-beginning
+查看所有topic list:
+./bin/kafka-topics.sh --zookeeper 192.168.1.37:2181 --list
+查看所有topic的描述信息:
+bin/kafka-topics.sh -zookeeper 192.168.1.37:2181 -describe -help
+bin/kafka-topics.sh --zookeeper 192.168.1.55:2181,192.168.1.55:2182,192.168.1.55:2183 --topic forexdata01 --describe
+./bin/kafka-topics.sh --zookeeper 192.168.1.55:2181 --alter --partitions 10 --topic forexdata01
+
+To run this example:
+
+Build the project with mvn package, this will generate an uber-jar with the streams app and all its dependencies.
+
+Create a wordcount-input topic:
+
+bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic wordcount-input --partitions 1 --replication-factor 1
+
+Produce some text to the topic. Don't forget to repeat words (so we can count higher than 1) and to use the word "the", so we can filter it.
+
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic wordcount-input
+
+Run the app:
+
+java -cp target/uber-kafka-streams-wordcount-1.0-SNAPSHOT.jar com.shapira.examples.streams.wordcount.WordCountExample
+
+Take a look at the results:
+
+bin/kafka-console-consumer.sh --topic wordcount-output --from-beginning --bootstrap-server localhost:9092 --property print.key=true
+
+If you want to reset state and re-run the application (maybe with some changes?) on existing input topic, you can:
+
+Reset internal topics (used for shuffle and state-stores):
+
+bin/kafka-streams-application-reset.sh --application-id wordcount --bootstrap-servers localhost:9092 --input-topic wordcount-input
+
+(optional) Delete the output topic:
+
+bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic wordcount-output
+bin/kafka-topics.sh --zookeeper 192.168.1.59:2181 --delete --topic test_streams_result
+
+curl -L -H'Content-Type: application/json' -XPOST --data-binary @quickstart/wikiticker-top-pages.json http://localhost:8082/druid/v2/?pretty
+
+删除:
+bin/kafka-topics.sh --delete --zookeeper 192.168.1.55:2181,192.168.1.55:2182,192.168.1.55:2183 --topic forexdata01
+rmr /brokers/topics/forexdata01
+rmr /config/topics/forexdata01
+
+删除topic之后重建时如要生效需要重启kafka服务。
+jmap -dump:format=b,file=文件名 [pid]
+
+bin/kafka-streams-application-reset.sh --application-id my-stream-processing-application --bootstrap-servers 192.168.1.59:9092 --input-topic test_streams1
+bin/kafka-topics.sh --zookeeper 192.168.1.59:2181 --delete --topic test_streams_result
+./bin/kafka-topics.sh --create --zookeeper 192.168.1.59:2181 --replication-factor 1 --partitions 2 --topic test_streams_result
+bin/kafka-topics.sh --zookeeper 192.168.1.59:2181 --topic test_streams_result --describe
+./bin/kafka-console-consumer.sh --zookeeper 192.168.1.59:2181 --topic test_streams_result --from-beginning
+
+
+java -jar RT-Message-0.0.1-SNAPSHOT.jar 
+
+java -classpath com.rt.platform.infosys.message.websocket.Main -p 10020 -t group
+
+ 获取utc时间:
+python -c 'import datetime; print(datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"))'
+python -c 'import datetime; print(datetime.datetime.utcnow())'
+获取普通时间:
+python -c 'import datetime; print(datetime.datetime.now())'
+
+
+SegmentAnalysis{id='market-forexdata01_2017-07-28T00:00:00.000Z_2017-07-29T00:00:00.000Z_2017-07-28T21:41:21.091Z', 
+interval=[2017-07-28T08:00:00.000+08:00/2017-07-29T08:00:00.000+08:00], 
+columns={__time=ColumnAnalysis{type='LONG', hasMultipleValues=false, size=14230, cardinality=null, minValue=null, maxValue=null, errorMessage='null'},
+ count=ColumnAnalysis{type='LONG', hasMultipleValues=false, size=11384, cardinality=null, minValue=null, maxValue=null, errorMessage='null'}, 
+ fcloseReserve=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=11664, cardinality=30, minValue=0.0, maxValue=9597.536, errorMessage='null'},
+ highPx=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=8847, cardinality=17, minValue=0.0, maxValue=9650.0, errorMessage='null'},
+ id=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=1423, cardinality=1, minValue=0, maxValue=0, errorMessage='null'}, 
+ lastClosePx=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=8406, cardinality=21, minValue=11399.0, maxValue=9535.0, errorMessage='null'},
+ lastPx=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=8909, cardinality=36, minValue=0.0, maxValue=9620.0, errorMessage='null'}, 
+ lowPx=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=8820, cardinality=17, minValue=0.0, maxValue=9525.0, errorMessage='null'}, 
+ openPx=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=8738, cardinality=17, minValue=0.0, maxValue=9555.0, errorMessage='null'}, 
+ prodCode=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=8437, cardinality=21, minValue=CMGCQ0, maxValue=PMHKAUYH, errorMessage='null'}, 
+ prodName=ColumnAnalysis{type='STRING', hasMultipleValues=false, size=19396, cardinality=21, minValue=LME铅03(电子), maxValue=黄金现货, errorMessage='null'}, 
+ week52High=ColumnAnalysis{type='FLOAT', hasMultipleValues=false, size=11384, cardinality=null, minValue=null, maxValue=null, errorMessage='null'},
+ week52Low=ColumnAnalysis{type='FLOAT', hasMultipleValues=false, size=11384, cardinality=null, minValue=null, maxValue=null, errorMessage='null'}}, 
+ size=151521, numRows=1423, aggregators=null, queryGranularity=null}
+ 
+ Jin:
+这个测试环境的配置有问题吗，老铁门
+阿飞:
+用jinfo -flags pid看看你的JVM参数
+Jin:
+-XX:CICompilerCount=2 -XX:InitialHeapSize=98566144 -XX:MaxHeapSize=1568669696 -XX:MaxNewSize=522715136 -XX:MinHeapDeltaBytes=524288 -XX:NewSize=32505856 -XX:OldSize=66060288 -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps -XX:+UseParallelGC
+Jin:
+有问题吗
+阿飞:
+给Command line的参数，不要给Non-default VM flags
+
+
+curl -X 'POST' -H 'Content-Type:application/json' -d @quickstart/wikiticker-index.json localhost:8090/druid/indexer/v1/task
+
+
+今天尝试编译内核，下载到了一份tar.xz结尾的压缩文件，网上解决方法比较少，不过还是找到了，如下：
+$xz -d ***.tar.xz
+
+$tar -xvf  ***.tar
+
+可以看到这个压缩包也是打包后再压缩，外面是xz压缩方式，里层是tar打包方式。
+打tar包
+tar -zcvf ./resource.tar.gz ./resource
+//在root用户下给hadoop用户授权
+chown -R hadoop ./hadoop/
+chown -R hadoop /home/
+
+vim ./etc/hadoop/hadoop-env.sh # 将‘export JAVA_HOME=${JAVA_HOME}’字段替换成‘export JAVA_HOME=/usr/lib/java/jdk1.*.*_**’即可
+//远程拷贝
+scp ./rt-druid-0.10.0.tar.gz root@192.168.1.59:/mnt/druid/
+
+nohup 2>&1是将标准出错重定向到标准输出
+完美解决方案：nohup ./start-dishi.sh >output 2>&1 &
+现对上面的命令进行下解释
+
+用途：不挂断地运行命令。
+语法：nohup Command [ Arg ... ] [　& ]
+描述：nohup 命令运行由 Command 参数和任何相关的 Arg 参数指定的命令，忽略所有挂断（SIGHUP）信号。在注销后使用 nohup 命令运行后台中的程序。要运行后台中的 nohup 命令，添加 & （ 表示“and”的符号）到命令的尾部。
+
+操作系统中有三个常用的流：
+　　0：标准输入流 stdin
+　　1：标准输出流 stdout
+　　2：标准错误流 stderr
+　　一般当我们用 > console.txt，实际是 1>console.txt的省略用法；< console.txt ，实际是 0 < console.txt的省略用法。
+ 
+ 
+下面步入正题：
+>nohup ./start-dishi.sh >output 2>&1 &
+解释：
+ 1. 带&的命令行，即使terminal（终端）关闭，或者电脑死机程序依然运行（前提是你把程序递交到服务器上)； 
+ 2. 2>&1的意思 
+　　这个意思是把标准错误（2）重定向到标准输出中（1），而标准输出又导入文件output里面，所以结果是标准错误和标准输出都导入文件output里面了。 至于为什么需要将标准错误重定向到标准输出的原因，那就归结为标准错误没有缓冲区，而stdout有。这就会导致 >output 2>output 文件output被两次打开，而stdout和stderr将会竞争覆盖，这肯定不是我门想要的. 
+　　这就是为什么有人会写成： nohup ./command.sh >output 2>output出错的原因了 
+==================================================================================
+最后谈一下/dev/null文件的作用，这是一个无底洞，任何东西都可以定向到这里，但是却无法打开。 所以一般很大的stdou和stderr当你不关心的时候可以利用stdout和stderr定向到这里>./command.sh >/dev/null 2>&1 
+
+The text field will use the postings highlighter by default because offsets are indexed.   ===>https://www.elastic.co/guide/en/elasticsearch/reference/5.5/index-options.html
+
+
+The index option controls whether field values are indexed. It accepts true or false. Fields that are not indexed are not queryable.
+For the legacy mapping type string the index option only accepts legacy values analyzed (default, treat as full-text field), not_analyzed (treat as keyword field) and no.
+ ====>https://www.elastic.co/guide/en/elasticsearch/reference/5.5/mapping-index.html
+ 
+ Keyword datatypeedit
+A field to index structured content such as email addresses, hostnames, status codes, zip codes or tags.
+
+They are typically used for filtering (Find me all blog posts where status is published), for sorting, and for aggregations. Keyword fields are only searchable by their exact value.
+
+If you need to index full text content such as email bodies or product descriptions, it is likely that you should rather use a text field.
+====>https://www.elastic.co/guide/en/elasticsearch/reference/5.5/keyword.html
+
+启动：
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+
+sysctl -w vm.max_map_count=262144
+
+# timedatectl # 查看系统时间方面的各种状态
+      Local time: 四 2014-12-25 10:52:10 CST
+  Universal time: 四 2014-12-25 02:52:10 UTC
+        RTC time: 四 2014-12-25 02:52:10
+        Timezone: Asia/Shanghai (CST, +0800)
+     NTP enabled: yes
+NTP synchronized: yes
+ RTC in local TZ: no
+      DST active: n/a
+# timedatectl list-timezones # 列出所有时区
+# timedatectl set-local-rtc 1 # 将硬件时钟调整为与本地时钟一致, 0 为设置为 UTC 时间
+# timedatectl set-timezone Asia/Shanghai # 设置系统时区为上海
+其实不考虑各个发行版的差异化, 从更底层出发的话, 修改时间时区比想象中要简单:
+
+# cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+设置UTC时区
+timedatectl set-timezone UTC
+date -s 15:47:44修改系统时间
+#设置时区
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+#设置时间
+date -s 12/15/2012
+date -s 22:50:49
+hwclock -w
+#查看时间
+date -R
+输出结果的末尾有 +0800 字样 则说明成功
+
+ZooKeeper连接字符串的格式为：hostname:port，此处hostname和port分别是ZooKeeper集群中某个节点的host和port；为了当某个host宕掉之后你能通过其他ZooKeeper节点进行连接，你可以按照一下方式制定多个hosts：
+hostname1:port1, hostname2:port2, hostname3:port3.
+
+ZooKeeper 允许你增加一个“chroot”路径，将集群中所有kafka数据存放在特定的路径下。当多个Kafka集群或者其他应用使用相同ZooKeeper集群时，可以使用这个方式设置数据存放路径。这种方式的实现可以通过这样设置连接字符串格式，如下所示：
+hostname1：port1，hostname2：port2，hostname3：port3/chroot/path
+这样设置就将所有kafka集群数据存放在/chroot/path路径下。注意，在你启动broker之前，你必须创建这个路径，并且consumers必须使用相同的连接格式。
+
+
+druid和hadoop相关:
+http://druid.io/docs/0.10.0/operations/other-hadoop.html
+https://liuliqiang.info/post/druid-using-hdfs-as-deep-storage/
+http://192.168.1.58:50070/explorer.html#/druid/indexing-logs
+http://druid.io/docs/latest/development/extensions-core/hdfs.html
+http://druid.io/docs/latest/configuration/production-cluster.html
+
+
+select * from admin_group   
+into outfile '/tmp/test.csv'   
+fields terminated by ',' optionally enclosed by '"' escaped by '"'   
+lines terminated by '\r\n';
+
+
+du -h --max-depth=1
+df -h查看所有的
+du -sh 查看当前目录
+find . -type f -size +100M
+du -sh [dirname|filename]
+   当前目录的大小：
+　　du -sh .
+　　当前目录下个文件或目录的大小：
+　　du -sh *
+　　显示前10个占用空间最大的文件或目录：
+　　du -s * | sort -nr | head
+Linux查看目录挂载点
+原创 2014年06月04日 08:58:11 标签：linux 5993
+用命令 df 即可
+[plain] view plain copy
+# df /var/lib/  
+Filesystem           1K-blocks      Used Available Use% Mounted on  
+/dev/sda3            135979984  66905292  62055896  52% /  
+
+不仅看到挂载点，也看到分区大小。
+加上-kh更容易看些：
+[plain] view plain copy
+# df /var/lib/ -kh  
+Filesystem            Size  Used Avail Use% Mounted on  
+/dev/sda3             130G   64G   60G  52% /  
+
+如果不用目录路径参数，则看到所有挂载点：
+[plain] view plain copy
+# df -kh  
+Filesystem            Size  Used Avail Use% Mounted on  
+/dev/sda3             130G   64G   60G  52% /  
+/dev/sda1              99M   18M   76M  20% /boot  
+tmpfs                  12G     0   12G   0% /dev/shm  
+/dev/sdb              458G  379G   56G  88% /data  
+
+mongo --port 20000 进入mongos界面
+mongos> sh.status(); 查看分片状态
+mongos> printShardingStatus()
+--- Sharding Status --- 
+  sharding version: {
+	"_id" : 1,
+	"minCompatibleVersion" : 5,
+	"currentVersion" : 6,
+	"clusterId" : ObjectId("59b1251be339ae5370205ba2")
+}
+  shards:
+	{  "_id" : "shard1",  "host" : "shard1/192.168.1.185:27001,192.168.1.186:27001",  "state" : 1 }
+	{  "_id" : "shard2",  "host" : "shard2/192.168.1.186:27002,192.168.1.187:27002",  "state" : 1 }
+	{  "_id" : "shard3",  "host" : "shard3/192.168.1.185:27003,192.168.1.187:27003",  "state" : 1 }
+  active mongoses:
+	"3.4.7" : 3
+ autosplit:
+	Currently enabled: yes
+  balancer:
+	Currently enabled:  yes
+	Currently running:  no
+		Balancer lock taken at Thu Sep 28 2017 16:00:20 GMT+0800 (CST) by ConfigServer:Balancer
+	Failed balancer rounds in last 5 attempts:  5
+	Last reported error:  could not find host matching read preference { mode: "primary" } for set shard2
+	Time of Reported error:  Thu Sep 28 2017 16:11:15 GMT+0800 (CST)
+	Migration Results for the last 24 hours: 
+		No recent migrations
+  databases:
+
+mongos> rs.status();
+{
+	"info" : "mongos",
+	"ok" : 0,
+	"errmsg" : "replSetGetStatus is not supported through mongos"
+}
+mongos> exit;
+
+[root@186server conf]# mongo 192.168.1.185:27001,192.168.1.186:27001/admin
+MongoDB shell version v3.4.7
+connecting to: mongodb://192.168.1.185:27001,192.168.1.186:27001/admin
+2017-09-28T16:57:39.782+0800 E QUERY    [thread1] Error: Cannot list multiple servers in URL without 'replicaSet' option :
+connect@src/mongo/shell/mongo.js:237:13
+@(connect):1:6
+exception: connect failed
+[root@186server conf]# mongo 192.168.1.186:27001/admin
+MongoDB shell version v3.4.7
+connecting to: mongodb://192.168.1.186:27001/admin
+shard1:PRIMARY> rs.status()
+{
+	"set" : "shard1",
+	"date" : ISODate("2017-09-28T08:58:18.348Z"),
+	"myState" : 1,
+	"term" : NumberLong(6),
+	"heartbeatIntervalMillis" : NumberLong(2000),
+	"optimes" : {
+		"lastCommittedOpTime" : {
+			"ts" : Timestamp(1506589093, 1),
+			"t" : NumberLong(6)
+		},
+		"appliedOpTime" : {
+			"ts" : Timestamp(1506589093, 1),
+			"t" : NumberLong(6)
+		},
+		"durableOpTime" : {
+			"ts" : Timestamp(1506589093, 1),
+			"t" : NumberLong(6)
+		}
+	},
+	"members" : [
+		{
+			"_id" : 0,
+			"name" : "192.168.1.185:27001",
+			"health" : 1,
+			"state" : 2,
+			"stateStr" : "SECONDARY",//副本分片
+			"uptime" : 2906,
+			"optime" : {
+				"ts" : Timestamp(1506589093, 1),
+				"t" : NumberLong(6)
+			},
+			"optimeDurable" : {
+				"ts" : Timestamp(1506589093, 1),
+				"t" : NumberLong(6)
+			},
+			"optimeDate" : ISODate("2017-09-28T08:58:13Z"),
+			"optimeDurableDate" : ISODate("2017-09-28T08:58:13Z"),
+			"lastHeartbeat" : ISODate("2017-09-28T08:58:17.158Z"),
+			"lastHeartbeatRecv" : ISODate("2017-09-28T08:58:17.030Z"),
+			"pingMs" : NumberLong(1),
+			"syncingTo" : "192.168.1.186:27001",
+			"configVersion" : 1
+		},
+		{
+			"_id" : 1,
+			"name" : "192.168.1.186:27001",
+			"health" : 1,
+			"state" : 1,
+			"stateStr" : "PRIMARY",//主分片
+			"uptime" : 3038,
+			"optime" : {
+				"ts" : Timestamp(1506589093, 1),
+				"t" : NumberLong(6)
+			},
+			"optimeDate" : ISODate("2017-09-28T08:58:13Z"),
+			"electionTime" : Timestamp(1506586182, 1),
+			"electionDate" : ISODate("2017-09-28T08:09:42Z"),
+			"configVersion" : 1,
+			"self" : true
+		},
+		{
+			"_id" : 2,
+			"name" : "192.168.1.187:27001",
+			"health" : 1,
+			"state" : 7,
+			"stateStr" : "ARBITER",//仲裁分片
+			"uptime" : 3026,
+			"lastHeartbeat" : ISODate("2017-09-28T08:58:16.518Z"),
+			"lastHeartbeatRecv" : ISODate("2017-09-28T08:58:18.225Z"),
+			"pingMs" : NumberLong(1),
+			"configVersion" : 1
+		}
+	],
+	"ok" : 1
+}
+
+shard1:PRIMARY> rs.isMaster();
+{
+	"hosts" : [
+		"192.168.1.185:27001",
+		"192.168.1.186:27001"
+	],
+	"arbiters" : [
+		"192.168.1.187:27001"
+	],
+	"setName" : "shard1",
+	"setVersion" : 1,
+	"ismaster" : true,
+	"secondary" : false,
+	"primary" : "192.168.1.186:27001",
+	"me" : "192.168.1.186:27001",
+	"electionId" : ObjectId("7fffffff0000000000000006"),
+	"lastWrite" : {
+		"opTime" : {
+			"ts" : Timestamp(1506589343, 1),
+			"t" : NumberLong(6)
+		},
+		"lastWriteDate" : ISODate("2017-09-28T09:02:23Z")
+	},
+	"maxBsonObjectSize" : 16777216,
+	"maxMessageSizeBytes" : 48000000,
+	"maxWriteBatchSize" : 1000,
+	"localTime" : ISODate("2017-09-28T09:02:28.018Z"),
+	"maxWireVersion" : 5,
+	"minWireVersion" : 0,
+	"readOnly" : false,
+	"ok" : 1
+}
+mongos> printShardingStatus()
+--- Sharding Status --- 
+  sharding version: {
+	"_id" : 1,
+	"version" : 4,
+	"minCompatibleVersion" : 4,
+	"currentVersion" : 5,
+	"clusterId" : ObjectId("54dc38c8f975c20703d7eed3")
+}
+  shards:
+	{  "_id" : "shard0000",  "host" : "localhost:10000" }
+	{  "_id" : "shard0001",  "host" : "localhost:10001" }
+  databases:
+	{  "_id" : "admin",  "partitioned" : false,  "primary" : "config" }
+	{  "_id" : "test",  "partitioned" : true,  "primary" : "shard0000" }
+		test.rgf
+			shard key: { "name" : 1 }
+			chunks:
+				shard0001	1
+				shard0000	1
+			{ "name" : { "$minKey" : 1 } } -->> { "name" : "agl" } on : shard0001 Timestamp(2, 0) 
+			{ "name" : "agl" } -->> { "name" : { "$maxKey" : 1 } } on : shard0000 Timestamp(2, 1) 
+
+mongos>
+4.2.1、删除片
+    用removeshard就能从集群中删除片。removeshard会把给定片上的所有块都挪到其他片上。
+mongos> db.runCommand({"removeshard":"localhost:10001"})
+{
+	"ok" : 0,
+	"errmsg" : "removeShard may only be run against the admin database.",
+	"code" : 13
+}
+    注意一定要切换到admin数据库
+mongos> use admin;
+switched to db admin
+mongos> db.runCommand({"removeshard":"localhost:10001"})
+{
+	"msg" : "draining started successfully",
+	"state" : "started",
+	"shard" : "shard0001",
+	"ok" : 1
+}
+mongos>
+    如果删除的片时数据库的基片，必须手动移动数据库（使用moveprimary命令）：
+mongos> db.runCommand({"moveprimary":"test","to":"localhost:10001"})
+{ "primary " : "shard0001:localhost:10001", "ok" : 1 }
+mongos> 
+mongos> use admin;
+switched to db admin
+mongos> db.runCommand({listshards:1});
+{
+	"shards" : [
+		{
+			"_id" : "shard1",
+			"host" : "shard1/192.168.1.185:27001,192.168.1.186:27001",
+			"state" : 1
+		},
+		{
+			"_id" : "shard2",
+			"host" : "shard2/192.168.1.186:27002,192.168.1.187:27002",
+			"state" : 1
+		},
+		{
+			"_id" : "shard3",
+			"host" : "shard3/192.168.1.185:27003,192.168.1.187:27003",
+			"state" : 1
+		}
+	],
+	"ok" : 1
+}
+db.userLoginAttrDto.stats();
+db.userLoginAttrDto.insert({"id":1,"lastLoginAgent":"zzzzz","lastLoginApp":11,"lastLoginIp":"dto"});
+mongos> db.runCommand( { enablesharding :"dbname"});
+{ "ok" : 1 }
+mongos> db.runCommand( { shardcollection : "dbname.userLoginAttrDto",key : {id: 1} } )
+{ "collectionsharded" : "dbname.userLoginAttrDto", "ok" : 1 }
+kill PID -2来关闭mongodb服务器（不要使用-9参数，会导致数据库文件损坏）
+db.shutdownServer()会关闭掉mongos进程
+
+
+SELECT USER,HOST FROM mysql.user;
+
+DELETE FROM USER WHERE mysql.user = 'druid'; 
+
+FLUSH PRIVILEGES;
+
+CREATE USER 'druid'@'localhost' IDENTIFIED BY 'druid';
+
+DELETE FROM USER WHERE USER = 'druid';
+
+
+
+java.io.IOException: No such file or directory  
+        at java.io.UnixFileSystem.createFileExclusively
+sudo chmod -R 777 <path>
+创建临时文件时也报错，执行 sudo chmod -R 777 /tmp/
+
+DELETE FROM mysql.db WHERE USER='druid';
+
+
