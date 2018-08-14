@@ -1,10 +1,19 @@
 package time;
 
+import com.google.common.util.concurrent.MoreExecutors;
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.Date;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * <pre>
@@ -33,7 +42,46 @@ import java.util.concurrent.TimeUnit;
  */
 public class Java8Time {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        String str = "aaa";
+        System.out.println(StringUtils.isNumeric(str));
+        LocalDate now = LocalDate.now();
+        System.out.println(now.getDayOfMonth());
+        System.out.println(now.getDayOfWeek().getValue());
+        Long a = null;
+        Long b = 2L;
+//        Long c = a + b;
+//        System.out.println("==================" + c);
+
+//        CompletableFuture[] completableFutures = IntStream.range(1, 10).mapToObj(i -> {
+//            System.out.println(i);
+//            return (Runnable) () -> System.out.println("run" + i);
+//        }).map(r -> CompletableFuture.supplyAsync(() -> (Callable<Boolean>) () -> {
+//            r.run();
+//            System.out.println("=======================");
+//            return Boolean.FALSE;
+//        }, MoreExecutors.directExecutor())).map(future -> future.thenAccept(s -> {
+//            try {
+//                Boolean call = s.call();
+//                System.out.println("*****" + call);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        })).toArray(CompletableFuture[]::new);
+//        CompletableFuture.allOf(completableFutures).join();
+
+        IntStream.range(1,10).forEach(i -> {
+            if(i == 5){
+                return;
+            }
+            System.out.println(i);
+        });
+
+        Thread.sleep(10000L);
+
+    }
+
+    public static void main2(String[] args) {
 
         // Instant now = Instant.now();
         // Instant start = now.minus(Duration.ofDays(1))
@@ -56,6 +104,7 @@ public class Java8Time {
         System.out.println(format);
 
         LocalDateTime localDateTime = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);;
+        Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         LocalDateTime localDateTime1 = localDateTime.minusDays(1);
         DateTimeFormatter dateTimeFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.println(dateTimeFormatter2.format(localDateTime));
@@ -78,11 +127,15 @@ public class Java8Time {
         System.out.println(now);
         int dayOfMonth = now.getDayOfMonth();
         System.out.println(dayOfMonth);
-//              
+//
 //        Month month = now.getMonth();
 //        int days = month.get(ChronoField.DAY_OF_MONTH);
 //        System.out.println(days);
         //return TimeUnit.DAYS.toMillis(days);
+        Long a = null;
+        Long b = 2L;
+        Long c = a + b;
+        System.out.println("==================" + c);
 
     }
 }
